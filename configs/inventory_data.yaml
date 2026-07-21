@@ -1,0 +1,11 @@
+path: ../datasets/inventory
+
+train: images/train
+val: images/val
+test: images/test
+
+#每一个类别对应一种需要识别和计数的铝型材产品
+names:
+  0: profile_type_a
+  1: profile_type_b
+  2: profile_type_c

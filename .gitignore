@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+env/
+venv/
+
+# Conda
+conda-meta/
+
+# YOLO Training
+runs/
+
+# Dataset
+dataset/
+datasets/
+
+# Model weights
+*.pt
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Excel
+*.xlsx
+
+# Images
+demo_outputs/
+
+# System
+.DS_Store
+Thumbs.db

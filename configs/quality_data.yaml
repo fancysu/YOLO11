@@ -1,0 +1,11 @@
+path: ../datasets/quality
+
+train: images/train
+val: images/val
+test: images/test
+
+names:
+  0: scratch
+  1: dent
+  2: coating_defect
+  3: stain
