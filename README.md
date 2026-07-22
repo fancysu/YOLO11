@@ -1,315 +1,394 @@
-# Scripts Overview
+# Industrial AI Vision based on YOLO11
 
-本项目基于 **YOLO11 + OpenCV** 搭建工业 AI 视觉检测系统，目前包含环境检查、目标检测、模型训练、货架盘点、色差检测等多个模块。
+> An Industrial AI Vision System for **Aluminium Profile Inspection**, **Inventory Counting**, and **Color Difference Detection** based on **YOLO11** and **OpenCV**.
 
 ---
 
-## 1. Environment Check
+## 📌 Project Introduction
 
-### Script
+This project aims to build an intelligent industrial vision system for aluminium profile manufacturing and warehouse management.
+
+Current development focuses on two application scenarios:
+
+- 📦 Aluminium Profile Inventory Counting
+- 🎨 Aluminium Surface Color Difference Detection
+
+The system is developed based on **YOLO11**, **OpenCV**, and **Python**, and is designed to support future deployment on industrial cameras and edge devices.
+
+---
+
+# ✨ Features
+
+## ✅ Current Features
+
+- YOLO11 environment setup
+- Pretrained object detection demo
+- Batch image inference
+- Inventory counting framework
+- Excel report export
+- Color difference calculation (Lab + ΔE2000)
+- Dataset split utility
+
+---
+
+## 🚧 Planned Features
+
+- Aluminium profile classification
+- Surface defect detection
+- Automatic inventory counting
+- ROI-based color comparison
+- Industrial camera integration
+- Real-time detection
+- Streamlit/PyQt visualization
+- Edge deployment (TensorRT / ONNX)
+
+---
+
+# 🏗 Project Workflow
+
+## 1. Inventory Counting
+
+```text
+Image
+   │
+   ▼
+YOLO11 Detection
+   │
+   ▼
+Category Recognition
+   │
+   ▼
+Object Counting
+   │
+   ▼
+Excel Report
+```
+
+---
+
+## 2. Color Difference Detection
+
+```text
+Reference Image
+          │
+          ▼
+     YOLO Detection
+          │
+          ▼
+      ROI Extraction
+          │
+          ▼
+ Remove Background
+          │
+          ▼
+      RGB → Lab
+          │
+          ▼
+     ΔE2000 Calculation
+          │
+          ▼
+ PASS / WARNING
+```
+
+---
+
+## 3. Future Industrial Workflow
+
+```text
+Industrial Camera
+        │
+        ▼
+YOLO11 Detection
+        │
+        ▼
+Product Classification
+        │
+        ├─────────────┐
+        ▼             ▼
+Inventory Count   Surface Inspection
+        │             │
+        ▼             ▼
+ Excel Report   Color Warning / Defect Alarm
+```
+
+---
+
+# 📂 Project Structure
+
+```text
+Industrial_AI_Vision/
+│
+├── configs/                  # Dataset configuration
+│   └── quality_data.yaml
+│
+├── dataset/                  # Training dataset (not uploaded)
+│   ├── images/
+│   └── labels/
+│
+├── demo_inputs/              # Demo images/videos
+│   ├── images/
+│   └── videos/
+│
+├── demo_outputs/             # Detection results
+│
+├── runs/                     # YOLO training outputs
+│
+├── scripts/
+│   ├── check_environment.py
+│   ├── demo_pretrained.py
+│   ├── train.py
+│   ├── validate.py
+│   ├── inventory_count.py
+│   ├── color_difference_demo.py
+│   └── split_dataset.py
+│
+├── utils/                    # Utility functions
+│
+├── README.md
+├── requirements.txt
+└── .gitignore
+```
+
+---
+
+# ⚙ Environment Setup
+
+## 1. Clone Repository
+
+```bash
+git clone https://github.com/yourname/Industrial_AI_Vision.git
+
+cd Industrial_AI_Vision
+```
+
+---
+
+## 2. Create Conda Environment
+
+```bash
+conda create -n industrial_yolo11 python=3.10
+
+conda activate industrial_yolo11
+```
+
+---
+
+## 3. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+or
+
+```bash
+pip install ultralytics opencv-python pandas numpy scikit-image openpyxl tqdm
+```
+
+---
+
+# 🚀 Quick Start
+
+## Check Environment
 
 ```bash
 python scripts/check_environment.py
 ```
 
-### Function
+Check whether:
 
-检查当前开发环境是否配置正确，包括：
+- Python
+- OpenCV
+- Ultralytics
+- PyTorch
+- CUDA
 
-- Python 版本
-- Ultralytics 版本
-- OpenCV 版本
-- PyTorch 版本
-- CUDA 是否可用
-- GPU 信息
-
-运行成功表示：
-
-- Python 环境正常
-- YOLO11 可以正常调用
-- 后续可以进行模型训练与推理
+are correctly installed.
 
 ---
 
-## 2. YOLO11 Pretrained Demo
+## YOLO11 Pretrained Detection
 
-### Script
+Single image:
 
 ```bash
-python scripts/demo_pretrained.py --source demo_inputs/images/general_test.jpg --device cpu
+python scripts/demo_pretrained.py --source demo_inputs/images/general_test.jpg
 ```
 
-或
+Batch images:
 
 ```bash
 python scripts/demo_pretrained.py --source demo_inputs/images
 ```
 
-### Function
+---
 
-使用 **YOLO11 预训练模型**进行目标检测。
+## Inventory Counting
 
-功能包括：
-
-- 加载 YOLO11 预训练模型
-- 图片读取
-- 自动目标检测
-- 绘制检测框
-- 保存检测结果
-
-输出目录：
-
+```bash
+python scripts/inventory_count.py \
+--weights yolo11n.pt \
+--source demo_inputs/images/general_test.jpg
 ```
 
-demo\_outputs/pretrained\_detection/
+Output:
 
-```
-
-说明：
-
-目前使用 COCO 预训练模型，仅能识别通用类别（person、car、truck 等），不能识别工业铝型材。
+- Detection image
+- Inventory statistics
+- Excel report
 
 ---
 
-## 3. Model Training
-
-### Script
+## Color Difference Detection
 
 ```bash
-python scripts/train.py --data configs/quality_data.yaml
+python scripts/color_difference_demo.py \
+--reference demo_inputs/images/reference.jpg \
+--sample demo_inputs/images/sample.jpg
 ```
 
-### Function
+Example Output
 
-训练自定义 YOLO11 模型。
+```text
+Reference Lab : [73.508 -1.273  2.380]
 
-主要流程：
+Sample Lab    : [46.699  1.283  7.559]
 
-- 加载预训练权重
-- 读取数据集
-- 开始训练
-- 自动保存 best.pt
+Delta E 2000  : 24.203
 
-训练完成后模型保存在：
-
+Result         : WARNING
 ```
 
+---
+
+## Dataset Split
+
+```bash
+python scripts/split_dataset.py
+```
+
+Automatically generate
+
+- train
+- validation
+- test
+
+datasets.
+
+---
+
+## Model Training
+
+```bash
+python scripts/train.py \
+--data configs/quality_data.yaml
+```
+
+Training results will be saved in
+
+```text
 runs/train/
-
 ```
-
-目前由于尚未提供数据集，此功能尚未进行实际训练测试。
 
 ---
 
-## 4. Model Validation
-
-### Script
+## Model Validation
 
 ```bash
-python scripts/validate.py --weights runs/train/weights/best.pt --data configs/quality_data.yaml
+python scripts/validate.py \
+--weights runs/train/weights/best.pt \
+--data configs/quality_data.yaml
 ```
 
-### Function
-
-验证训练后的模型性能。
-
-输出指标包括：
+Output metrics:
 
 - Precision
 - Recall
 - mAP50
 - mAP50-95
 
-目前等待模型训练完成后进行测试。
-
 ---
 
-## 5. Inventory Counting
-
-### Script
-
-```bash
-python scripts/inventory_count.py --weights yolo11n.pt --source demo_inputs/images/general_test.jpg --device cpu
-```
-
-### Function
-
-实现货架产品数量统计。
-
-流程：
-
-```
-
-Image
-↓
-YOLO Detection
-↓
-Category Extraction
-↓
-Count Objects
-↓
-Export Excel
-
-```
-
-输出：
-
-- 检测结果图片
-- 产品数量统计
-- Excel 报表
-
-目前由于未训练工业数据，仅能统计 COCO 类别。
-
-后续训练完成后可统计：
-
-- 铝型材A
-- 铝型材B
-- 铝型材C
-- ...
-
----
-
-## 6. Color Difference Demo
-
-### Script
-
-```bash
-python scripts/color_difference_demo.py --reference demo_inputs/images/reference.jpg --sample demo_inputs/images/sample.jpg
-```
-
-### Function
-
-实现产品颜色比较。
-
-流程：
-
-```
-
-Reference Image
-↓
-RGB → Lab
-↓
-ΔE2000 Calculation
-↓
-PASS / WARNING
-
-```
-
-测试结果：
-
-### Test 1
-
-Reference VS Reference
-
-```
-
-DeltaE = 0.000
-PASS
-
-```
-
-### Test 2
-
-Reference VS Sample
-
-```
-
-DeltaE = 24.203
-WARNING
-
-```
-
-说明：
-
-目前为 Demo，仅计算整张图片代表颜色。
-
-后续将升级为：
-
-```
-
-YOLO Detection
-↓
-ROI Extraction
-↓
-Remove Background
-↓
-Remove Reflection
-↓
-Lab
-↓
-ΔE2000
-↓
-Color Warning
-
-```
-
----
-
-## 7. Dataset Split
-
-### Script
-
-```bash
-python scripts/split_dataset.py
-```
-
-### Function
-
-自动划分数据集。
-
-功能：
-
-- Train
-- Validation
-- Test
-
-默认比例：
-
-```
-
-8 : 1 : 1
-
-```
-
-适用于甲方数据标注完成后的数据整理。
-
----
-
-# Current Development Status
+# 📊 Current Development Status
 
 | Module | Status |
 |---------|--------|
-| Development Environment | ✅ Completed |
-| YOLO11 Installation | ✅ Completed |
-| Project Structure | ✅ Completed |
-| Environment Check | ✅ Completed |
-| Pretrained Detection Demo | ✅ Completed |
-| Image Detection | ✅ Completed |
-| Batch Image Detection | ✅ Completed |
-| Inventory Counting Framework | ✅ Completed |
-| Excel Export | ✅ Completed |
-| Color Difference Demo | ✅ Completed |
-| Dataset Split Tool | ✅ Completed |
-| Industrial Dataset Training | ⏳ Waiting for dataset |
-| Aluminium Profile Recognition | ⏳ Waiting for dataset |
-| Surface Defect Detection | ⏳ Waiting for dataset |
-| Real Shelf Inventory | ⏳ Waiting for dataset |
-| Industrial Camera Integration | ⏳ Future Work |
+| Environment Setup | ✅ |
+| YOLO11 Installation | ✅ |
+| Project Framework | ✅ |
+| Environment Check | ✅ |
+| Pretrained Detection | ✅ |
+| Batch Image Detection | ✅ |
+| Inventory Counting Framework | ✅ |
+| Excel Export | ✅ |
+| Color Difference Demo | ✅ |
+| Dataset Split Tool | ✅ |
+| Custom Model Training | ⏳ |
+| Aluminium Profile Recognition | ⏳ |
+| Surface Defect Detection | ⏳ |
+| Industrial Camera Integration | ⏳ |
+| Real-time Deployment | ⏳ |
 
 ---
 
-# Next Step
+# 🛣 Roadmap
 
-After receiving the customer's dataset:
+## Phase 1
 
-1. Data annotation (LabelImg / CVAT)
-2. Convert to YOLO format
-3. Dataset split
-4. Train YOLO11
-5. Model evaluation
-6. Aluminium profile classification
-7. Surface defect detection
-8. Automatic inventory counting
-9. Color difference warning
-10. Industrial deployment
+- [x] Project framework
+- [x] Environment setup
+- [x] YOLO11 demo
+- [x] Inventory counting framework
+- [x] Color difference demo
+
+---
+
+## Phase 2
+
+- [ ] Customer dataset collection
+- [ ] Data annotation
+- [ ] YOLO11 training
+- [ ] Model evaluation
+
+---
+
+## Phase 3
+
+- [ ] Aluminium profile classification
+- [ ] Surface defect detection
+- [ ] Inventory statistics
+- [ ] Color warning
+
+---
+
+## Phase 4
+
+- [ ] Industrial camera
+- [ ] Streamlit interface
+- [ ] Edge deployment
+
+---
+
+# 🛠 Tech Stack
+
+- Python 3.10
+- YOLO11 (Ultralytics)
+- OpenCV
+- NumPy
+- Pandas
+- Scikit-image
+- PyTorch
+
+---
+
+# 📄 License
+
+This project is released under the MIT License.
+
+---
+
+# 👨‍💻 Author
+
+Industrial AI Vision Project
+
+YOLO11 + OpenCV + Python

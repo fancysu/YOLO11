@@ -35,3 +35,52 @@ demo_outputs/
 # System
 .DS_Store
 Thumbs.db
+
+# Customer and private data
+dataset/
+datasets/
+customer_data/
+private_data/
+raw_data/
+annotations/
+labels/
+images/
+videos/
+
+# Model weights
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Training outputs
+runs/
+outputs/
+demo_outputs/
+
+# Reports
+*.xlsx
+*.csv
+*.pdf
+
+# Secrets
+.env
+.env.*
+*.key
+*.pem
+config_private.yaml
+secrets.yaml
+
+# Camera and deployment configs
+camera_config.yaml
+device_config.yaml
+
+# Python
+__pycache__/
+*.pyc
+
+# IDE and system
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
